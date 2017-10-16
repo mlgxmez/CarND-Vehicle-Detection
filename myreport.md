@@ -10,13 +10,13 @@ The goals / steps of this project are the following:
 * Estimate a bounding box for vehicles detected.
 
 [//]: # (Image References)
-[image1]: ./examples/car_not_car.png
-[image2]: ./examples/HOG_example.jpg
-[image3]: ./examples/sliding_windows.jpg
-[image4]: ./examples/sliding_window.jpg
-[image5]: ./examples/bboxes_and_heat.png
-[image6]: ./examples/labels_map.png
-[image7]: ./examples/output_bboxes.png
+[image1]: ./output_images/raw_images.png
+[image5]: ./output_images/bbox1.png
+[image6]: ./output_images/bbox2.png
+[image7]: ./output_images/bbox3.png
+[image2]: ./output_images/heatmap1.png
+[image3]: ./output_images/heatmap2.png
+[image4]: ./output_images/heatmap3.png
 [video1]: ./project_video.mp4
 
 ## [Rubric](https://review.udacity.com/#!/rubrics/513/view) Points
@@ -39,10 +39,7 @@ I started by reading in all the `vehicle` and `non-vehicle` images.  Here is an 
 
 ![alt text][image1]
 
-I then selected the `YCrCb` color space and HOG parameters of `orientations=9`, `pixels_per_cell=(8, 8)` and `cells_per_block=(2, 2)`.  I grabbed random images from each of the two classes and displayed them to get a feel for what the `skimage.hog()` output looks like.
-
-
-![alt text][image2]
+I then selected the `YCrCb` color space and HOG parameters of `orientations=9`, `pixels_per_cell=(8, 8)` and `cells_per_block=(2, 2)`. 
 
 #### 2. Explain how you settled on your final choice of HOG parameters.
 
@@ -61,26 +58,31 @@ In the following section we bounded the search region to the lower part of the i
 
 Taking into account the distance between the camera and the surrounding cars gives you the intuition and the overlap between windows. The overlap of pixels must be subtle in order to detect smoothly the car in all the frames of the video.
 
-### #2. Show some examples of test images to demonstrate how your pipeline is working.  What did you do to optimize the performance of your classifier?
+#### 2. Show some examples of test images to demonstrate how your pipeline is working.  What did you do to optimize the performance of your classifier?
 
-Ultimately I searched on two scales using YCrCb 3-channel HOG features plus spatially binned color and histograms of color in the feature vector, which provided a nice result.  Here are some example images:
+Ultimately I searched on two scales using YCrCb 3-channel HOG features plus spatially binned color and histograms of color in the feature vector, which provided a nice result.  Here are some example images (with the heatmap, explained in the next section):
 
+![alt text][image2]
+![alt text][image3]
 ![alt text][image4]
+
 ---
 
 ### Video Implementation
 
 #### 1. Provide a link to your final video output.  Your pipeline should perform reasonably well on the entire project video (somewhat wobbly or unstable bounding boxes are ok as long as you are identifying the vehicles most of the time with minimal false positives.)
-Here's a [link to my video result](./project_video_output.mp4)
 
+Here's a [link to my video result](./project_video_output.mp4)
 
 #### 2. Describe how (and identify where in your code) you implemented some kind of filter for false positives and some method for combining overlapping bounding boxes.
 
 I recorded the positions of positive detections in each frame of the video.  From the positive detections I created a heatmap and then thresholded that map to identify vehicle positions.  I then used `scipy.ndimage.measurements.label()` to identify individual blobs in the heatmap.  I then assumed each blob corresponded to a vehicle.  I constructed bounding boxes to cover the area of each blob detected.  
 
-Here's an example result showing the heatmap from a series of frames of video, the result of `scipy.ndimage.measurements.label()` and the bounding boxes then overlaid on few test images:
+Here's an example result of the resulting bounding boxes from test images, the result of `scipy.ndimage.measurements.label()`. A similar result can be seen in the output video.
 
-
+![alt text][image5]
+![alt text][image6]
+![alt text][image7]
 
 ---
 
